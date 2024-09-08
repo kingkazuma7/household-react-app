@@ -3,7 +3,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import HomeIcon from '@mui/icons-material/Home';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { NavLink } from 'react-router-dom';
 
 interface SidebarProps {
   drawerWidth: number,
@@ -23,6 +24,19 @@ const Sidebar = ({ drawerWidth, mobileOpen, handleDrawerToggle }: SidebarProps) 
     { text: "Home", path: "/", icon: HomeIcon },
     { text: "Report", path: "/report", icon: EqualizerIcon }
   ]
+  
+  // デフォルトメニュー
+  const baseLinkStyle:CSSProperties = {
+    textDecoration: "none",
+    color: "inherit",
+    display: "block"
+  }
+  
+  // 選択されたメニュー
+  const activeLinkStyle:CSSProperties = {
+    fontWeight: 'bold',
+    backgroundColor: "rgba(0,0,0,0.1)"
+  }
 
   const drawer = (
     <div>
@@ -30,14 +44,19 @@ const Sidebar = ({ drawerWidth, mobileOpen, handleDrawerToggle }: SidebarProps) 
       <Divider />
       <List>
         {MenuItems.map((item, index: number) => (
-          <ListItem key={index.toString()} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <item.icon />
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
+          <NavLink key={index} to={item.path} style={({ isActive }) => { return {
+            ...baseLinkStyle,
+            ...(isActive ? activeLinkStyle : {})
+          }}}>
+            <ListItem key={index} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <item.icon />
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
         ))}
       </List>
       <Divider />
